@@ -1,0 +1,10 @@
+vendor
+var/cache
+var/application-logger
+var/email
+public/var
+public/bundles
+var/assets
+var/versions
+var/log
+var/installer
