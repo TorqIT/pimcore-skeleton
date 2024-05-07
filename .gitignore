@@ -48,3 +48,5 @@ nbproject
 
 # temp
 .temp
+
+supervisord.pid
