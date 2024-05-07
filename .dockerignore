@@ -1,4 +1,5 @@
 vendor
+cache
 var/cache
 var/application-logger
 var/email
