@@ -16,6 +16,16 @@
 namespace App;
 
 use Pimcore\Bundle\AdminBundle\PimcoreAdminBundle;
+use Pimcore\Bundle\ApplicationLoggerBundle\PimcoreApplicationLoggerBundle;
+use Pimcore\Bundle\CustomReportsBundle\PimcoreCustomReportsBundle;
+use Pimcore\Bundle\GlossaryBundle\PimcoreGlossaryBundle;
+use Pimcore\Bundle\SeoBundle\PimcoreSeoBundle;
+use Pimcore\Bundle\SimpleBackendSearchBundle\PimcoreSimpleBackendSearchBundle;
+use Pimcore\Bundle\StaticRoutesBundle\PimcoreStaticRoutesBundle;
+use Pimcore\Bundle\TinymceBundle\PimcoreTinymceBundle;
+use Pimcore\Bundle\UuidBundle\PimcoreUuidBundle;
+use Pimcore\Bundle\WordExportBundle\PimcoreWordExportBundle;
+use Pimcore\Bundle\XliffBundle\PimcoreXliffBundle;
 use Pimcore\HttpKernel\BundleCollection\BundleCollection;
 use Pimcore\Kernel as PimcoreKernel;
 
@@ -30,5 +40,15 @@ class Kernel extends PimcoreKernel
     public function registerBundlesToCollection(BundleCollection $collection): void
     {
         $collection->addBundle(new PimcoreAdminBundle(), 60);
+        $collection->addBundle(new PimcoreApplicationLoggerBundle());
+        $collection->addBundle(new PimcoreCustomReportsBundle());
+        $collection->addBundle(new PimcoreGlossaryBundle());
+        $collection->addBundle(new PimcoreSeoBundle());
+        $collection->addBundle(new PimcoreSimpleBackendSearchBundle());
+        $collection->addBundle(new PimcoreStaticRoutesBundle());
+        $collection->addBundle(new PimcoreTinymceBundle());
+        $collection->addBundle(new PimcoreUuidBundle());
+        $collection->addBundle(new PimcoreXliffBundle());
+        $collection->addBundle(new PimcoreWordExportBundle());
     }
 }
