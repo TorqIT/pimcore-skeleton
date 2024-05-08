@@ -10,8 +10,7 @@ RUN set -eux; \
 # source directory and run a full composer install. This will take advantage of Docker-build caching when the composer
 # dependencies do not change.
 # TODO stage/context option for custom composer files
-COPY --chown=www-data:www-data /composer.json /var/www/html/composer.json
-COPY --chown=www-data:www-data /composer.lock /var/www/html/composer.lock
+COPY --chown=www-data:www-data /composer.* /var/www/html
 COPY /.docker/composer-install-dependencies.sh /composer-install-dependencies.sh
 RUN /composer-install-dependencies.sh
 # TODO be more selective about what to copy into image
