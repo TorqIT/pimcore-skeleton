@@ -7,6 +7,6 @@ then
   . /composer-install-dependencies.sh
 fi
 
-#runuser -u www-data -- bin/console cache:clear
+runuser -u www-data -- bin/console cache:clear
 
 . /init.sh
