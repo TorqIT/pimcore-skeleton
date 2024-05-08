@@ -64,7 +64,7 @@ services:
             - "80:80"
         volumes:
             - .:/var/www/html:rw
-            - ./.docker/php/nginx.conf:/etc/nginx/sites-available/default:ro
+            - ./.docker/php-debug/nginx-debug.conf:/etc/nginx/sites-available/default:ro
 
     php-debug:
         container_name: ${APP_NAME}-php-debug
