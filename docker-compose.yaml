@@ -1,9 +1,11 @@
 services:
     redis:
+        container_name: ${APP_NAME}-redis
         image: redis:alpine
         command: [ redis-server, --maxmemory 128mb, --maxmemory-policy volatile-lru, --save "" ]
 
     db:
+        container_name: ${APP_NAME}-db
         image: mariadb:10.11
         working_dir: /application
         command: [ mysqld, --character-set-server=utf8mb4, --collation-server=utf8mb4_general_ci, --innodb-file-per-table=1 ]
@@ -25,6 +27,7 @@ services:
             timeout: 3s
 
     init:
+        container_name: ${APP_NAME}-init
         build:
             dockerfile: ./.docker/Dockerfile
             target: init
@@ -39,6 +42,7 @@ services:
         command: [ "/init.local.sh" ]
 
     php:
+        container_name: ${APP_NAME}-php
         build:
           dockerfile: ./.docker/Dockerfile
           target: php
@@ -64,6 +68,7 @@ services:
             - ./.docker/php/nginx.conf:/etc/nginx/sites-available/default:ro
 
     supervisord:
+        container_name: ${APP_NAME}-supervisord
         build:
             dockerfile: ./.docker/Dockerfile
             target: supervisord
