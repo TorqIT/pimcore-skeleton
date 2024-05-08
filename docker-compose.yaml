@@ -73,14 +73,14 @@ services:
             target: php-debug
         environment:
             - XDEBUG_CONFIG=remote_enable=1
-            - PHP_IDE_CONFIG=serverName=duluth
+            - PHP_IDE_CONFIG=serverName=localhost
         env_file:
             - .env
         depends_on:
             init:
                 condition: service_completed_successfully
         volumes:
-            - .:/var/www/html:ro
+            - .:/var/www/html
             - ./.docker/php/nginx.conf:/etc/nginx/sites-available/default:ro
 
     supervisord:
