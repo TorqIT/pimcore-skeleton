@@ -2,10 +2,17 @@ FROM pimcore/pimcore:php8.2-v3 as base
 # TODO arg for passing in custom Linux packages
 RUN set -eux; \
     apt-get update -y; \
-    apt-get install -y --no-install-recommends vim supervisor netcat-traditional default-mysql-client; \
+    apt-get install -y --no-install-recommends autoconf make g++ unixodbc-dev cron vim supervisor netcat-traditional default-mysql-client; \
     rm -rf /var/lib/apt/lists/*; \
     usermod -u 1000 www-data; \
     groupmod -g 1000 www-data;
+# TODO required until Pimcore adds this to their image...
+RUN set -eux; \
+    apt-get update -y; \
+    apt-get install -y librabbitmq-dev; \
+    rm -rf /var/lib/apt/lists/*; \
+    pecl install amqp; \
+    docker-php-ext-enable amqp;
 # We copy in the composer files and download dependencies, then in a separate set of statements below copy in the full
 # source directory and run a full composer install. This will take advantage of Docker-build caching when the composer
 # dependencies do not change.
@@ -45,10 +52,6 @@ FROM base as supervisord-conf-src
 COPY /.docker/supervisord/supervisord.conf /etc/supervisor/conf.d/pimcore.conf
 
 FROM base as supervisord
-RUN set -eux; \
-    apt-get update -y; \
-    apt-get install -y --no-install-recommends cron; \
-    rm -rf /var/lib/apt/lists/*;
 COPY --from=pimcore/pimcore:php8.2-supervisord-v3 /var/run /var/run
 COPY --from=pimcore/pimcore:php8.2-supervisord-v3 /usr/sbin/cron /usr/sbin/cron
 COPY --from=pimcore/pimcore:php8.2-supervisord-v3 /etc/supervisor/supervisord.conf /etc/supervisor/supervisord.conf

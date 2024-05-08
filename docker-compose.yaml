@@ -37,7 +37,7 @@ services:
         env_file:
             -   .env
         volumes:
-            - .:/var/www/html
+            - .:/var/www/html:rw
             - ./.docker/init/init.local.sh:/init.local.sh
         command: [ "/init.local.sh" ]
 
@@ -48,7 +48,6 @@ services:
           target: php
         environment:
           COMPOSER_HOME: /var/www/html
-          PHP_IDE_CONFIG: serverName=localhost
           # Feed installer configuration via ENV variables.
           # See: https://pimcore.com/docs/pimcore/current/Development_Documentation/Getting_Started/Advanced_Installation_Topics.html#page_Advanced-Installation-Topics
           PIMCORE_INSTALL_MYSQL_USERNAME: ${PIMCORE_INSTALL_MYSQL_USERNAME}
@@ -64,7 +63,24 @@ services:
         ports:
             - "80:80"
         volumes:
-            - .:/var/www/html
+            - .:/var/www/html:rw
+            - ./.docker/php/nginx.conf:/etc/nginx/sites-available/default:ro
+
+    php-debug:
+        container_name: ${APP_NAME}-php-debug
+        build:
+            dockerfile: ./.docker/Dockerfile
+            target: php-debug
+        environment:
+            - XDEBUG_CONFIG=remote_enable=1
+            - PHP_IDE_CONFIG=serverName=duluth
+        env_file:
+            - .env
+        depends_on:
+            init:
+                condition: service_completed_successfully
+        volumes:
+            - .:/var/www/html:ro
             - ./.docker/php/nginx.conf:/etc/nginx/sites-available/default:ro
 
     supervisord:
@@ -78,7 +94,7 @@ services:
         env_file:
             -   .env
         volumes:
-            - .:/var/www/html
+            - .:/var/www/html:rw
             - ./.docker/supervisord/supervisord.conf:/etc/supervisor/conf.d/pimcore.conf:ro
 
     # The following two services are used for testing.
