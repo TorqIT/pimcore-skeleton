@@ -46,7 +46,7 @@ COPY --from=nginx-conf-src /etc/nginx/sites-available/default /etc/nginx/sites-a
 COPY /.docker/php/supervisord.conf /etc/supervisor/supervisord.conf
 RUN runuser -u www-data -- /var/www/html/bin/console pimcore:build:classes; \
     runuser -u www-data -- /var/www/html/bin/console cache:warmup
-CMD [ "/usr/bin/supervisord" ]
+CMD [ "/usr/bin/supervisord", "-c", "/etc/supervisor/supervisord.conf" ]
 
 FROM base as supervisord-conf-src
 COPY /.docker/supervisord/supervisord.conf /etc/supervisor/conf.d/pimcore.conf
@@ -58,7 +58,7 @@ COPY --from=pimcore/pimcore:php8.2-supervisord-v3 /etc/supervisor/supervisord.co
 COPY --from=supervisord-conf-src /etc/supervisor/conf.d/pimcore.conf /etc/supervisor/conf.d/pimcore.conf
 RUN runuser -u www-data -- /var/www/html/bin/console pimcore:build:classes; \
     runuser -u www-data -- /var/www/html/bin/console cache:warmup
-CMD [ "/usr/bin/supervisord" ]
+CMD [ "/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/pimcore.conf" ]
 
 FROM base as php-debug
 COPY --from=pimcore/pimcore:php8.2-debug-v3 /usr/local/bin/entrypoint.sh /usr/local/bin/entrypoint.sh
