@@ -1,5 +1,6 @@
 .github
 cache
+config/**/local/*.yaml
 public/var
 public/bundles
 var/application-logger
@@ -11,6 +12,7 @@ var/log
 var/versions
 vendor
 .editorconfig
+.env
 .gitattributes
 .git
 docker-compose.yaml
