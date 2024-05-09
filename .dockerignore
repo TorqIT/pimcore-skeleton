@@ -1,5 +1,6 @@
 .github
 cache
+config/local/*.yaml
 public/var
 public/bundles
 var/application-logger
