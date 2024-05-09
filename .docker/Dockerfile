@@ -5,13 +5,6 @@ RUN set -eux; \
     rm -rf /var/lib/apt/lists/*; \
     usermod -u 1000 www-data; \
     groupmod -g 1000 www-data;
-# TODO required until Pimcore adds this to their image...
-RUN set -eux; \
-    apt-get update -y; \
-    apt-get install -y librabbitmq-dev; \
-    rm -rf /var/lib/apt/lists/*; \
-    pecl install amqp; \
-    docker-php-ext-enable amqp;
 # We copy in the composer files and download dependencies, then in a separate set of statements below copy in the full
 # source directory and run a full composer install. This will take advantage of Docker-build caching when the composer
 # dependencies do not change.

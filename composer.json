@@ -15,7 +15,6 @@
     "pimcore/pimcore": "*",
     "pimcore/admin-ui-classic-bundle": "^1.4",
     "pimcore/platform-version": "2024.1",
-    "symfony/amqp-messenger": "^6.2",
     "symfony/dotenv": "^6.2",
     "symfony/runtime": "^6.2"
   },
