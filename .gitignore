@@ -12,10 +12,9 @@
 /.env.local
 /.env.local.php
 /.env.*.local
-
-# Difference from pimcore/skeleton - we commit local config files so that they are available for developer's to use on
-# their machines, but use .dockerignore to prevent them from being built into the images. Using docker-compose locally,
-# developers can then mount them into the running container.
+!/config/local
+/config/local/*
+!config/local/.gitkeep
 
 /var/*
 !/var/.gitkeep
