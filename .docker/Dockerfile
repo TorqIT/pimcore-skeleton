@@ -25,23 +25,9 @@ RUN set -eux; \
     apt-get update -y; \
     apt-get install -y --no-install-recommends nginx; \
     rm -rf /var/lib/apt/lists/*;
-# php.ini configuration
-ENV PHP_MEMORY_LIMIT=4G
-ENV PHP_UPLOAD_MAX_FILESIZE=20G
-ENV PHP_POST_MAX_SIZE=20G
-ENV PHP_MAX_EXECUTION_TIME=0
-ENV PHP_MAX_INPUT_TIME=-1
 COPY /.docker/php/php.ini /usr/local/etc/php/conf.d/docker-pimcore-php.ini
-# php-fpm.conf configuration
-ENV PHP_FPM_MAX_CHILDREN=275
-ENV PHP_FPM_START_SERVERS=75
-ENV PHP_FPM_MIN_SPARE_SERVERS=75
-ENV PHP_FPM_MAX_SPARE_SERVERS=200
-COPY /.docker/php/php-fpm.conf /usr/local/etc/php-fpm.d/www.conf
-# nginx configuration
 COPY /.docker/php/nginx.conf /etc/nginx/sites-available/default
 COPY /.docker/php/supervisord.conf /etc/supervisor/supervisord.conf
-# Build Pimcore classes and warm up the cache to improve container start-up
 RUN runuser -u www-data -- /var/www/html/bin/console pimcore:build:classes; \
     runuser -u www-data -- /var/www/html/bin/console cache:warmup
 CMD [ "/usr/bin/supervisord", "-c", "/etc/supervisor/supervisord.conf" ]
