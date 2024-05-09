@@ -1,2 +1,13 @@
 doctrine:
-    dbal: { connections: { default: { host: db, port: '3306', user: pimcore, password: pimcore, dbname: pimcore, mapping_types: { enum: string, bit: boolean }, server_version: '10.11.7-MariaDB-1:10.11.7+maria~ubu2204' } } }
+    dbal:
+        connections:
+            default:
+                host: db
+                port: '3306'
+                user: pimcore
+                password: pimcore
+                dbname: pimcore
+                mapping_types:
+                    enum: string
+                    bit: boolean
+                server_version: '10.11.7-MariaDB-1:10.11.7+maria~ubu2204'
