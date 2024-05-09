@@ -23,11 +23,6 @@ runuser -u www-data -- /var/www/html/bin/console pimcore:bundle:install PimcoreT
 runuser -u www-data -- /var/www/html/bin/console pimcore:bundle:install PimcoreUuidBundle --fail-without-error
 runuser -u www-data -- /var/www/html/bin/console pimcore:bundle:install PimcoreXliffBundle --fail-without-error
 runuser -u www-data -- /var/www/html/bin/console pimcore:bundle:install PimcoreWordExportBundle --fail-without-error
-#runuser -u www-data -- /var/www/html/bin/console pimcore:bundle:install PimcoreDataHubBundle
-#runuser -u www-data -- /var/www/html/bin/console pimcore:bundle:install PimcoreDataImporterBundle
-#runuser -u www-data -- /var/www/html/bin/console pimcore:bundle:install PimcoreWebToPrintBundle
-#runuser -u www-data -- /var/www/html/bin/console pimcore:bundle:install ElementsProcessManagerBundle
-# TODO use env var as list of extra bundles to install
 
 echo Running migration...
 runuser -u www-data -- /var/www/html/bin/console doctrine:migrations:migrate -n
@@ -36,7 +31,7 @@ echo Rebuilding classes...
 runuser -u www-data -- /var/www/html/bin/console pimcore:deployment:classes-rebuild -c -d -n
 
 echo Generating roles...
-# TODO role creator
+runuser -u www-data -- /var/www/html/bin/console torq:generate-roles
 
-echo Generating folders...
-# TODO folder creator
+echo Creating folders...
+runuser -u www-data -- /var/www/html/bin/console torq:folder-creator

@@ -28,6 +28,8 @@ use Pimcore\Bundle\WordExportBundle\PimcoreWordExportBundle;
 use Pimcore\Bundle\XliffBundle\PimcoreXliffBundle;
 use Pimcore\HttpKernel\BundleCollection\BundleCollection;
 use Pimcore\Kernel as PimcoreKernel;
+use TorqIT\FolderCreatorBundle\FolderCreatorBundle;
+use TorqIT\RoleCreatorBundle\RoleCreatorBundle;
 
 class Kernel extends PimcoreKernel
 {
@@ -40,6 +42,7 @@ class Kernel extends PimcoreKernel
     public function registerBundlesToCollection(BundleCollection $collection): void
     {
         $collection->addBundle(new PimcoreAdminBundle(), 60);
+        // Official Pimcore bundles
         $collection->addBundle(new PimcoreApplicationLoggerBundle());
         $collection->addBundle(new PimcoreCustomReportsBundle());
         $collection->addBundle(new PimcoreGlossaryBundle());
@@ -50,5 +53,8 @@ class Kernel extends PimcoreKernel
         $collection->addBundle(new PimcoreUuidBundle());
         $collection->addBundle(new PimcoreXliffBundle());
         $collection->addBundle(new PimcoreWordExportBundle());
+        // Custom bundles
+        $collection->addBundle(new FolderCreatorBundle());
+        $collection->addBundle(new RoleCreatorBundle());
     }
 }
