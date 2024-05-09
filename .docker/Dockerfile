@@ -1,5 +1,4 @@
 FROM pimcore/pimcore:php8.2-v3 as base
-# TODO arg for passing in custom Linux packages
 RUN set -eux; \
     apt-get update -y; \
     apt-get install -y --no-install-recommends autoconf make g++ unixodbc-dev cron vim supervisor netcat-traditional default-mysql-client; \
@@ -16,25 +15,18 @@ RUN set -eux; \
 # We copy in the composer files and download dependencies, then in a separate set of statements below copy in the full
 # source directory and run a full composer install. This will take advantage of Docker-build caching when the composer
 # dependencies do not change.
-# TODO stage/context option for custom composer files
+# TODO php.ini and php-fpm.ini
 COPY --chown=www-data:www-data /composer.* /var/www/html
 COPY /.docker/composer-install-dependencies.sh /composer-install-dependencies.sh
 RUN /composer-install-dependencies.sh
-# TODO be more selective about what to copy into image
-COPY --chown=www-data:www-data / /var/www/html
+COPY --chown=www-data:www-data / /var/www/html/bin
 RUN cd /var/www/html; \
     runuser -u www-data -- php /usr/local/bin/composer install
 
 FROM base as init
-# TODO allow for custom bundles to be passed via args
+# TODO allow for custom bundles to be passed via args?
 COPY /.docker/init/init.sh /init.sh
 CMD [ "/init.sh" ]
-
-# Default sources for config files
-# TODO php.ini - should probably go at base level?
-FROM base as nginx-conf-src
-COPY /.docker/php/nginx.conf /etc/nginx/sites-available/default
-# TODO php fpm ini
 
 FROM base as php
 RUN set -eux; \
@@ -42,20 +34,17 @@ RUN set -eux; \
     apt-get install -y --no-install-recommends nginx; \
     rm -rf /var/lib/apt/lists/*;
 # TODO what to specify as "source path" when copying from outside context?
-COPY --from=nginx-conf-src /etc/nginx/sites-available/default /etc/nginx/sites-available/default
+COPY /.docker/php/nginx.conf /etc/nginx/sites-available/default
 COPY /.docker/php/supervisord.conf /etc/supervisor/supervisord.conf
 RUN runuser -u www-data -- /var/www/html/bin/console pimcore:build:classes; \
     runuser -u www-data -- /var/www/html/bin/console cache:warmup
 CMD [ "/usr/bin/supervisord", "-c", "/etc/supervisor/supervisord.conf" ]
 
-FROM base as supervisord-conf-src
-COPY /.docker/supervisord/supervisord.conf /etc/supervisor/conf.d/pimcore.conf
-
 FROM base as supervisord
 COPY --from=pimcore/pimcore:php8.2-supervisord-v3 /var/run /var/run
 COPY --from=pimcore/pimcore:php8.2-supervisord-v3 /usr/sbin/cron /usr/sbin/cron
 COPY --from=pimcore/pimcore:php8.2-supervisord-v3 /etc/supervisor/supervisord.conf /etc/supervisor/supervisord.conf
-COPY --from=supervisord-conf-src /etc/supervisor/conf.d/pimcore.conf /etc/supervisor/conf.d/pimcore.conf
+COPY /.docker/supervisord/supervisord.conf /etc/supervisor/conf.d/pimcore.conf
 RUN runuser -u www-data -- /var/www/html/bin/console pimcore:build:classes; \
     runuser -u www-data -- /var/www/html/bin/console cache:warmup
 CMD [ "/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/pimcore.conf" ]
