@@ -19,7 +19,7 @@ RUN set -eux; \
 COPY --chown=www-data:www-data /composer.* /var/www/html
 COPY /.docker/composer-install-dependencies.sh /composer-install-dependencies.sh
 RUN /composer-install-dependencies.sh
-COPY --chown=www-data:www-data / /var/www/html/bin
+COPY --chown=www-data:www-data / /var/www/html
 RUN cd /var/www/html; \
     runuser -u www-data -- php /usr/local/bin/composer install
 
