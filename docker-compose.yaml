@@ -1,24 +1,22 @@
 services:
     redis:
+        container_name: ${APP_NAME}-redis
         image: redis:alpine
         command: [ redis-server, --maxmemory 128mb, --maxmemory-policy volatile-lru, --save "" ]
 
-    rabbitmq:
-        image: rabbitmq:alpine
-        volumes:
-            - pimcore-rabbitmq:/var/lib/rabbitmq/
-
     db:
+        container_name: ${APP_NAME}-db
         image: mariadb:10.11
         working_dir: /application
         command: [ mysqld, --character-set-server=utf8mb4, --collation-server=utf8mb4_general_ci, --innodb-file-per-table=1 ]
         volumes:
             - pimcore-database:/var/lib/mysql
         environment:
-            - MYSQL_ROOT_PASSWORD=ROOT
-            - MYSQL_DATABASE=pimcore
-            - MYSQL_USER=pimcore
-            - MYSQL_PASSWORD=pimcore
+            - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+            - MYSQL_DATABASE=${MYSQL_DATABASE}
+            - MYSQL_USER=${MYSQL_USER}
+            - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+            - MYSQL_PORT=${MYSQL_PORT}
         healthcheck:
             # The service is considered healthy when:
             # - connection to pimcore db can be established, and
@@ -28,49 +26,79 @@ services:
             retries: 6
             start_period: 1m
             timeout: 3s
-
-    nginx:
-        image: nginx:stable-alpine
         ports:
-            - "80:80"
-        volumes:
-            - .:/var/www/html:ro
-            - ./.docker/nginx.conf:/etc/nginx/conf.d/default.conf:ro
+            - "${DATABASE_PORT_EXTERNAL}:${MYSQL_PORT}"
+
+    init:
+        container_name: ${APP_NAME}-init
+        build:
+            dockerfile: ./.docker/Dockerfile
+            target: init
         depends_on:
-            - php
+            db:
+                condition: service_healthy
+        env_file:
+            -   .env
+        volumes:
+            - .:/var/www/html:rw
+            - ./.docker/init/init.local.sh:/init.local.sh
+        command: [ "/init.local.sh" ]
 
     php:
-        #user: '1000:1000' # set to your uid:gid
-        image: pimcore/pimcore:php8.2-debug-latest
+        container_name: ${APP_NAME}-php
+        build:
+          dockerfile: ./.docker/Dockerfile
+          target: php
         environment:
-            COMPOSER_HOME: /var/www/html
-            PHP_IDE_CONFIG: serverName=localhost
-            # Feed installer configuration via ENV variables.
-            # See: https://pimcore.com/docs/pimcore/current/Development_Documentation/Getting_Started/Advanced_Installation_Topics.html#page_Advanced-Installation-Topics
-            PIMCORE_INSTALL_MYSQL_USERNAME: pimcore
-            PIMCORE_INSTALL_MYSQL_PASSWORD: pimcore
-            PIMCORE_INSTALL_MYSQL_PORT: 3306
-            PIMCORE_INSTALL_MYSQL_HOST_SOCKET: db
-            PIMCORE_INSTALL_MYSQL_DATABASE: pimcore
+          COMPOSER_HOME: /var/www/html
+          # Feed installer configuration via ENV variables.
+          # See: https://pimcore.com/docs/pimcore/current/Development_Documentation/Getting_Started/Advanced_Installation_Topics.html#page_Advanced-Installation-Topics
+          PIMCORE_INSTALL_MYSQL_USERNAME: ${PIMCORE_INSTALL_MYSQL_USERNAME}
+          PIMCORE_INSTALL_MYSQL_PASSWORD: ${PIMCORE_INSTALL_MYSQL_PASSWORD}
+          PIMCORE_INSTALL_MYSQL_PORT: ${PIMCORE_INSTALL_MYSQL_PORT}
+          PIMCORE_INSTALL_MYSQL_HOST_SOCKET: ${PIMCORE_INSTALL_MYSQL_HOST_SOCKET}
+          PIMCORE_INSTALL_MYSQL_DATABASE: ${PIMCORE_INSTALL_MYSQL_DATABASE}
+        env_file:
+            -   .env
         depends_on:
-            db:
-                condition: service_healthy
+            init:
+                condition: service_completed_successfully
+        ports:
+            - "${WEB_PORT_EXTERNAL}:80"
+        volumes:
+            - .:/var/www/html:rw
+            - ./.docker/php-debug/nginx-debug.conf:/etc/nginx/sites-available/default:ro
+
+    php-debug:
+        container_name: ${APP_NAME}-php-debug
+        build:
+            dockerfile: ./.docker/Dockerfile
+            target: php-debug
+        environment:
+            - XDEBUG_CONFIG=remote_enable=1
+            - PHP_IDE_CONFIG=serverName=localhost
+        env_file:
+            - .env
+        depends_on:
+            init:
+                condition: service_completed_successfully
         volumes:
             - .:/var/www/html
-            - ./.docker/messenger.yaml:/var/www/html/config/packages/messenger.yaml:ro
+            - ./.docker/php/nginx.conf:/etc/nginx/sites-available/default:ro
 
     supervisord:
-        #user: '1000:1000' # set to your uid:gid
-        image: pimcore/pimcore:php8.2-supervisord-latest
+        container_name: ${APP_NAME}-supervisord
+        build:
+            dockerfile: ./.docker/Dockerfile
+            target: supervisord
         depends_on:
-            rabbitmq:
-                condition: service_started
-            db:
-                condition: service_healthy
+            init:
+                condition: service_completed_successfully
+        env_file:
+            -   .env
         volumes:
-            - .:/var/www/html
-            - ./.docker/messenger.yaml:/var/www/html/config/packages/messenger.yaml:ro
-            - ./.docker/supervisord.conf:/etc/supervisor/conf.d/pimcore.conf:ro
+            - .:/var/www/html:rw
+            - ./.docker/supervisord/supervisord.conf:/etc/supervisor/conf.d/pimcore.conf:ro
 
     # The following two services are used for testing.
     # We restrict these services to the test profile only, so we don't spin them up with every `docker compose up`.
@@ -99,7 +127,6 @@ services:
 
 volumes:
     pimcore-database:
-    pimcore-rabbitmq:
     pimcore-test-database:
     pimcore-test-var:
     pimcore-test-public-var:

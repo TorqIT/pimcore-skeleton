@@ -12,9 +12,10 @@
 /.env.local
 /.env.local.php
 /.env.*.local
-!/config/local
-/config/local/*
-!config/local/.gitkeep
+
+# Difference from pimcore/skeleton - we allow committing of files in the config/local directory so that developer's
+# can share them, but use .dockerignore to ensure they are not built into the Docker images. When developers run
+# the Docker Compose locally, they can then simply mount the directory into the running containers.
 
 /var/*
 !/var/.gitkeep
@@ -39,6 +40,7 @@
 
 # composer
 /vendor/
+/cache/
 
 # PhpStorm / IDEA
 .idea
@@ -47,3 +49,7 @@ nbproject
 
 # temp
 .temp
+
+supervisord.pid
+supervisord.log
+.htaccess

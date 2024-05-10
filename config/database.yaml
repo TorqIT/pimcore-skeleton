@@ -1,0 +1,13 @@
+doctrine:
+    dbal:
+        connections:
+            default:
+                host: "%env(DATABASE_HOST)%"
+                port: "%env(DATABASE_PORT)%"
+                user: "%env(DATABASE_USER)%"
+                password: "%env(DATABASE_PASSWORD)%"
+                dbname: "%env(DATABASE_NAME)%"
+                mapping_types:
+                    enum: string
+                    bit: boolean
+                server_version: "%env(DATABASE_SERVER_VERSION)%"

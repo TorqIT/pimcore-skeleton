@@ -1,5 +1,6 @@
 imports:
     - { resource: 'local/' }
+    - { resource: 'database.yaml' }
 
 
 pimcore:
@@ -106,13 +107,13 @@ framework:
 #        json_manifest_path: '%kernel.project_dir%/public/build/manifest.json'
 
 #### USE CUSTOM CACHE POOL
-#    cache:
-#        pools:
-#            pimcore.cache.pool:
-#                public: true
-#                default_lifetime: 31536000  # 1 year
-#                adapter: cache.adapter.redis_tag_aware
-#                provider: 'redis://localhost' # Redis DNS, see: https://symfony.com/doc/current/components/cache/adapters/redis_adapter.html#configure-the-connection
+    cache:
+        pools:
+            pimcore.cache.pool:
+                public: true
+                default_lifetime: 31536000  # 1 year
+                adapter: cache.adapter.redis_tag_aware
+                provider: "redis://%env(REDIS_HOST)%:6379/%env(REDIS_DB)%" # Redis DNS, see: https://symfony.com/doc/current/components/cache/adapters/redis_adapter.html#configure-the-connection
 
 #### USE SESSION HANDLER CONFIGURED IN php.ini
 #    session:

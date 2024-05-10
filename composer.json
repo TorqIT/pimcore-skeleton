@@ -12,11 +12,13 @@
   },
   "prefer-stable": true,
   "require": {
-    "pimcore/pimcore": "^11.1",
-    "pimcore/admin-ui-classic-bundle": "^1.2",
-    "symfony/amqp-messenger": "^6.2",
+    "pimcore/admin-ui-classic-bundle": "^1.4",
+    "pimcore/pimcore": "*",
+    "pimcore/platform-version": "2024.1",
     "symfony/dotenv": "^6.2",
-    "symfony/runtime": "^6.2"
+    "symfony/runtime": "^6.2",
+    "torqit/pimcore-folder-creator-bundle": "^3.0",
+    "torqit/pimcore-role-creator-bundle": "^3.1"
   },
   "require-dev": {
     "codeception/codeception": "^5.0.3",
