@@ -2,8 +2,6 @@
 
 set -e
 
-echo "Database host is $DATABASE_HOST"
-
 # TODO extra condition to make extra-sure this doesn't run in non-local envs
 if [ "$(mysql -h "$DATABASE_HOST" -u "$DATABASE_USER" -p"$DATABASE_PASSWORD" \
       -sse "select count(*) from information_schema.tables where table_schema='pimcore' and table_name='assets';")" -eq 0 ]
