@@ -11,6 +11,7 @@ then
 fi
 
 echo Installing bundles...
+runuser -u www-data -- /var/www/html/bin/console pimcore:bundle:install PimcoreAdminBundle --fail-without-error
 runuser -u www-data -- /var/www/html/bin/console pimcore:bundle:install PimcoreApplicationLoggerBundle --fail-without-error
 runuser -u www-data -- /var/www/html/bin/console pimcore:bundle:install PimcoreCustomReportsBundle --fail-without-error
 runuser -u www-data -- /var/www/html/bin/console pimcore:bundle:install PimcoreGlossaryBundle --fail-without-error
