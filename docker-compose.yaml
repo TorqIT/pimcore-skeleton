@@ -40,7 +40,7 @@ services:
         env_file:
             -   .env
         volumes:
-            - .:/var/www/html:rw
+            - .:/var/www/html
             - ./.docker/init/init.local.sh:/init.local.sh
         command: [ "/init.local.sh" ]
 
@@ -66,7 +66,7 @@ services:
         ports:
             - "${WEB_PORT_EXTERNAL}:80"
         volumes:
-            - .:/var/www/html:rw
+            - .:/var/www/html
             - ./.docker/php-debug/nginx-debug.conf:/etc/nginx/sites-available/default:ro
 
     php-debug:
@@ -97,7 +97,7 @@ services:
         env_file:
             -   .env
         volumes:
-            - .:/var/www/html:rw
+            - .:/var/www/html
             - ./.docker/supervisord/supervisord.conf:/etc/supervisor/conf.d/pimcore.conf:ro
 
     # The following two services are used for testing.
