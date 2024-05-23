@@ -3,7 +3,7 @@ doctrine:
         connections:
             default:
                 host: "%env(DATABASE_HOST)%"
-                port: "%env(DATABASE_PORT)%"
+                port: "%env(string:DATABASE_PORT)%"
                 user: "%env(DATABASE_USER)%"
                 password: "%env(DATABASE_PASSWORD)%"
                 dbname: "%env(DATABASE_NAME)%"
