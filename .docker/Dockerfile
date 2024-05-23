@@ -1,7 +1,7 @@
 FROM pimcore/pimcore:php8.2-v3 as base
 RUN set -eux; \
     apt-get update -y; \
-    apt-get install -y --no-install-recommends autoconf make g++ unixodbc-dev cron procps vim supervisor netcat-traditional default-mysql-client; \
+    apt-get install -y --no-install-recommends autoconf make g++ unixodbc-dev cron procps iputils-ping vim supervisor netcat-traditional default-mysql-client; \
     rm -rf /var/lib/apt/lists/*; \
     usermod -u 1000 www-data; \
     groupmod -g 1000 www-data;
