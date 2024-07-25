@@ -13,7 +13,9 @@ COPY /.docker/composer-install-dependencies.sh /composer-install-dependencies.sh
 RUN /composer-install-dependencies.sh
 COPY --chown=www-data:www-data / /var/www/html
 RUN cd /var/www/html; \
-    runuser -u www-data -- php /usr/local/bin/composer install
+    runuser -u www-data -- php /usr/local/bin/composer install; \
+    runuser -u www-data -- /var/www/html/bin/console pimcore:build:classes; \
+    runuser -u www-data -- /var/www/html/bin/console cache:warmup
 
 FROM base as init
 # TODO allow for custom bundles to be passed via args?
@@ -28,8 +30,6 @@ RUN set -eux; \
 COPY /.docker/php/php.ini /usr/local/etc/php/conf.d/docker-pimcore-php.ini
 COPY /.docker/php/nginx.conf /etc/nginx/sites-available/default
 COPY /.docker/php/supervisord.conf /etc/supervisor/supervisord.conf
-RUN runuser -u www-data -- /var/www/html/bin/console pimcore:build:classes; \
-    runuser -u www-data -- /var/www/html/bin/console cache:warmup
 CMD [ "/usr/bin/supervisord", "-c", "/etc/supervisor/supervisord.conf" ]
 
 FROM base as supervisord
@@ -37,8 +37,6 @@ COPY --from=pimcore/pimcore:php8.2-supervisord-v3 /var/run /var/run
 COPY --from=pimcore/pimcore:php8.2-supervisord-v3 /usr/sbin/cron /usr/sbin/cron
 COPY --from=pimcore/pimcore:php8.2-supervisord-v3 /etc/supervisor/supervisord.conf /etc/supervisor/supervisord.conf
 COPY /.docker/supervisord/supervisord.conf /etc/supervisor/conf.d/pimcore.conf
-RUN runuser -u www-data -- /var/www/html/bin/console pimcore:build:classes; \
-    runuser -u www-data -- /var/www/html/bin/console cache:warmup
 CMD [ "/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/pimcore.conf" ]
 
 FROM base as php-debug
