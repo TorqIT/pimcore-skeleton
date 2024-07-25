@@ -11,17 +11,17 @@ then
 fi
 
 echo Installing bundles...
-runuser -u www-data -- /var/www/html/bin/console pimcore:bundle:install PimcoreAdminBundle --fail-without-error
-runuser -u www-data -- /var/www/html/bin/console pimcore:bundle:install PimcoreApplicationLoggerBundle --fail-without-error
-runuser -u www-data -- /var/www/html/bin/console pimcore:bundle:install PimcoreCustomReportsBundle --fail-without-error
-runuser -u www-data -- /var/www/html/bin/console pimcore:bundle:install PimcoreGlossaryBundle --fail-without-error
-runuser -u www-data -- /var/www/html/bin/console pimcore:bundle:install PimcoreSeoBundle --fail-without-error
-runuser -u www-data -- /var/www/html/bin/console pimcore:bundle:install PimcoreSimpleBackendSearchBundle --fail-without-error
-runuser -u www-data -- /var/www/html/bin/console pimcore:bundle:install PimcoreStaticRoutesBundle --fail-without-error
-runuser -u www-data -- /var/www/html/bin/console pimcore:bundle:install PimcoreTinymceBundle --fail-without-error
-runuser -u www-data -- /var/www/html/bin/console pimcore:bundle:install PimcoreUuidBundle --fail-without-error
-runuser -u www-data -- /var/www/html/bin/console pimcore:bundle:install PimcoreXliffBundle --fail-without-error
-runuser -u www-data -- /var/www/html/bin/console pimcore:bundle:install PimcoreWordExportBundle --fail-without-error
+runuser -u www-data -- /var/www/html/bin/console pimcore:bundle:install PimcoreAdminBundle
+runuser -u www-data -- /var/www/html/bin/console pimcore:bundle:install PimcoreApplicationLoggerBundle
+runuser -u www-data -- /var/www/html/bin/console pimcore:bundle:install PimcoreCustomReportsBundle
+runuser -u www-data -- /var/www/html/bin/console pimcore:bundle:install PimcoreGlossaryBundle
+runuser -u www-data -- /var/www/html/bin/console pimcore:bundle:install PimcoreSeoBundle
+runuser -u www-data -- /var/www/html/bin/console pimcore:bundle:install PimcoreSimpleBackendSearchBundle
+runuser -u www-data -- /var/www/html/bin/console pimcore:bundle:install PimcoreStaticRoutesBundle
+runuser -u www-data -- /var/www/html/bin/console pimcore:bundle:install PimcoreTinymceBundle
+runuser -u www-data -- /var/www/html/bin/console pimcore:bundle:install PimcoreUuidBundle
+runuser -u www-data -- /var/www/html/bin/console pimcore:bundle:install PimcoreXliffBundle
+runuser -u www-data -- /var/www/html/bin/console pimcore:bundle:install PimcoreWordExportBundle
 
 echo Running migration...
 runuser -u www-data -- /var/www/html/bin/console doctrine:migrations:migrate -n
