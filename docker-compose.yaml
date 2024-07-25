@@ -51,13 +51,6 @@ services:
           target: php
         environment:
           COMPOSER_HOME: /var/www/html
-          # Feed installer configuration via ENV variables.
-          # See: https://pimcore.com/docs/pimcore/current/Development_Documentation/Getting_Started/Advanced_Installation_Topics.html#page_Advanced-Installation-Topics
-          PIMCORE_INSTALL_MYSQL_USERNAME: ${PIMCORE_INSTALL_MYSQL_USERNAME}
-          PIMCORE_INSTALL_MYSQL_PASSWORD: ${PIMCORE_INSTALL_MYSQL_PASSWORD}
-          PIMCORE_INSTALL_MYSQL_PORT: ${PIMCORE_INSTALL_MYSQL_PORT}
-          PIMCORE_INSTALL_MYSQL_HOST_SOCKET: ${PIMCORE_INSTALL_MYSQL_HOST_SOCKET}
-          PIMCORE_INSTALL_MYSQL_DATABASE: ${PIMCORE_INSTALL_MYSQL_DATABASE}
         env_file:
             -   .env
         depends_on:

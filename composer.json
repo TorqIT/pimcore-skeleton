@@ -12,9 +12,9 @@
   },
   "prefer-stable": true,
   "require": {
-    "pimcore/admin-ui-classic-bundle": "^1.4",
     "pimcore/pimcore": "*",
-    "pimcore/platform-version": "2024.1",
+    "pimcore/platform-version": "^2024.2",
+    "pimcore/admin-ui-classic-bundle": "*",
     "symfony/dotenv": "^6.2",
     "symfony/runtime": "^6.2",
     "torqit/pimcore-folder-creator-bundle": "^3.0",
