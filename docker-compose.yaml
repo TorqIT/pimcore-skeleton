@@ -77,7 +77,6 @@ services:
                 condition: service_completed_successfully
         volumes:
             - .:/var/www/html
-            - ./.docker/php/nginx.conf:/etc/nginx/sites-available/default:ro
 
     supervisord:
         container_name: ${APP_NAME}-supervisord
