@@ -41,6 +41,7 @@ services:
             -   .env
         volumes:
             - .:/var/www/html
+            - ./docker/init/init.sh:/init.sh
             - ./.docker/init/init.local.sh:/init.local.sh
         command: [ "/init.local.sh" ]
 
