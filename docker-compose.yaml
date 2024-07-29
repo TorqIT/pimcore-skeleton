@@ -1,8 +1,7 @@
 services:
     redis:
-        container_name: ${APP_NAME}-redis
-        build:
-            dockerfile: ./.docker/redis/Dockerfile
+        image: redis:alpine
+        command: [ redis-server, --maxmemory 128mb, --maxmemory-policy volatile-lru, --save ""  ]
 
     db:
         container_name: ${APP_NAME}-db
