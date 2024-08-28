@@ -1,4 +1,4 @@
-FROM pimcore/pimcore:php8.2-v3 AS base
+FROM pimcore/pimcore:php8.3-v3 AS base
 RUN set -eux; \
     apt-get update -y; \
     apt-get install -y --no-install-recommends autoconf make g++ unixodbc-dev cron procps iputils-ping vim supervisor netcat-traditional default-mysql-client; \
@@ -33,14 +33,14 @@ COPY /.docker/php/supervisord.conf /etc/supervisor/supervisord.conf
 CMD [ "/usr/bin/supervisord", "-c", "/etc/supervisor/supervisord.conf" ]
 
 FROM base AS supervisord
-COPY --from=pimcore/pimcore:php8.2-supervisord-v3 /var/run /var/run
-COPY --from=pimcore/pimcore:php8.2-supervisord-v3 /usr/sbin/cron /usr/sbin/cron
-COPY --from=pimcore/pimcore:php8.2-supervisord-v3 /etc/supervisor/supervisord.conf /etc/supervisor/supervisord.conf
+COPY --from=pimcore/pimcore:php8.3-supervisord-v3 /var/run /var/run
+COPY --from=pimcore/pimcore:php8.3-supervisord-v3 /usr/sbin/cron /usr/sbin/cron
+COPY --from=pimcore/pimcore:php8.3-supervisord-v3 /etc/supervisor/supervisord.conf /etc/supervisor/supervisord.conf
 COPY /.docker/supervisord/supervisord.conf /etc/supervisor/conf.d/pimcore.conf
 CMD [ "/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/pimcore.conf" ]
 
 FROM base AS php-debug
-COPY --from=pimcore/pimcore:php8.2-debug-v3 /usr/local/bin/entrypoint.sh /usr/local/bin/entrypoint.sh
+COPY --from=pimcore/pimcore:php8.3-debug-v3 /usr/local/bin/entrypoint.sh /usr/local/bin/entrypoint.sh
 RUN pecl install xdebug; \
     docker-php-ext-enable xdebug;
 ENV PHP_IDE_CONFIG serverName=localhost
