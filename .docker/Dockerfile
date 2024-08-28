@@ -44,5 +44,6 @@ COPY --from=pimcore/pimcore:php8.2-debug-v3 /usr/local/bin/entrypoint.sh /usr/lo
 RUN pecl install xdebug; \
     docker-php-ext-enable xdebug;
 ENV PHP_IDE_CONFIG serverName=localhost
+COPY /.docker/php-debug/xdebug.conf /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
 ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
 CMD ["php-fpm"]
