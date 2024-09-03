@@ -101,7 +101,8 @@ pimcore:
 
 #### SYMFONY OVERRIDES
 framework:
-
+    router:
+        default_uri: "%env(DEFAULT_DOMAIN_NAME)%"
     trusted_proxies: "127.0.0.1,REMOTE_ADDR"
     trusted_headers:
         [
