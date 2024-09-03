@@ -2,10 +2,7 @@
 
 set -e
 
-if [ ! -d /var/www/html/vendor ];
-then
-  . /composer-install-dependencies.sh
-fi
+. /composer-install-dependencies.sh
 
 if [ "$(mysql -h "$DATABASE_HOST" -u "$DATABASE_USER" -p"$DATABASE_PASSWORD" \
       -sse "select count(*) from information_schema.tables where table_schema='pimcore' and table_name='assets';")" -ne 0 ]
