@@ -13,7 +13,7 @@
   "prefer-stable": true,
   "require": {
     "pimcore/pimcore": "*",
-    "pimcore/platform-version": "^2024.2",
+    "pimcore/platform-version": "^2024.3",    
     "pimcore/admin-ui-classic-bundle": "*",
     "symfony/dotenv": "^6.4",
     "symfony/runtime": "^6.4",
