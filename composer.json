@@ -15,8 +15,8 @@
     "pimcore/pimcore": "*",
     "pimcore/platform-version": "^2024.3",    
     "pimcore/admin-ui-classic-bundle": "*",
-    "symfony/dotenv": "^6.4",
-    "symfony/runtime": "^6.4",
+    "symfony/dotenv": "^6.4.11",
+    "symfony/runtime": "^6.4.11",
     "torqit/pimcore-folder-creator-bundle": "^3.0",
     "torqit/pimcore-role-creator-bundle": "^3.1"
   },
