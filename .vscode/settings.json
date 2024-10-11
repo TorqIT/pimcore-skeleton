@@ -1,0 +1,19 @@
+{
+  "restoreTerminals.terminals": [
+    {
+      "splitTerminals": [
+        {
+          "name": "Spin up docker containers",
+          "commands": ["docker-compose up"]
+        },
+        {
+          "name": "Start bash in Pimcore container",
+          "commands": [
+            "sleep 10", // wait for container to start
+            "docker compose exec -it --user www-data php bash"
+          ]
+        }
+      ]
+    }
+  ]
+}
