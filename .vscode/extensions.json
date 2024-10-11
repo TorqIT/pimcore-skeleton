@@ -1,0 +1,10 @@
+{
+  "recommendations": [
+    "ms-vscode-remote.remote-wsl",
+    "ms-azuretools.vscode-docker",
+    "xdebug.php-debug",
+    "bmewburn.vscode-intelephense-client",
+    "ethansk.restore-terminals",
+    "ms-azuretools.vscode-bicep"
+  ]
+}
