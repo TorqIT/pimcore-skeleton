@@ -1,6 +1,13 @@
 parameters:
     secret: DETzaWisgJOBN+SK87M1o8laf6d+8ZT3sA+Asjm+TNE=
 
+    env(DATABASE_HOST): ''
+    env(DATABASE_PORT): 0
+    env(DATABASE_NAME): ''
+    env(DATABASE_USER): ''
+    env(DATABASE_PASSWORD): ''
+    env(DATABASE_SERVER_VERSION): '0.0.0'
+
     # customize the full path to external executables
     # normally they are auto-detected by `which program` or auto-discovered in the configured path in
     # System Settings -> General -> Additional $PATH variable
