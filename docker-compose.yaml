@@ -50,8 +50,6 @@ services:
         build:
           dockerfile: ./.docker/Dockerfile
           target: php
-        environment:
-          COMPOSER_HOME: /var/www/html
         env_file:
             -   .env
         depends_on:
